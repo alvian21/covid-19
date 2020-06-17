@@ -16,7 +16,7 @@ export default class CovidList extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { covid: [], activePage: 15 };
+        this.state = { covid: [] };
     }
 
     componentDidMount() {
