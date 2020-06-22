@@ -4,11 +4,10 @@ import axios from 'axios';
 
 const Covid = props => (
     <tr>
-        <td>{props.covid.Country_Region}</td>
-        <td>{props.covid.Confirmed}</td>
-        <td>{props.covid.Deaths}</td>
-        <td>{props.covid.Recovered}</td>
-        <td>{props.covid.Active}</td>
+        <td>{props.covid.Country}</td>
+        <td>{props.covid.TotalConfirmed}</td>
+        <td>{props.covid.TotalDeaths}</td>
+        <td>{props.covid.TotalRecovered}</td>
     </tr >
 )
 
@@ -16,14 +15,15 @@ export default class CovidList extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { covid: [] };
+        this.state = { covid: [], total: [] };
     }
 
     componentDidMount() {
-        axios.get('http://api.kawalcorona.com')
+        axios.get('https://api.covid19api.com/summary')
             .then(response => {
                 this.setState({
-                    covid: response.data
+                    covid: response.data.Countries,
+                    total: response.data.Global
                 })
             }).catch((error) => {
                 console.log(error);
@@ -32,25 +32,16 @@ export default class CovidList extends Component {
 
     covidList() {
         return this.state.covid.map(currentdata => {
-            return <Covid covid={currentdata.attributes} key={currentdata.attributes.OBJECTID} ></Covid>
-        })
-    }
-
-    covidSum() {
-        var total = 0;
-        this.state.covid.forEach(element => {
-            total += element.attributes.Confirmed
-        });
-        return total;
-
-
+            return <Covid covid={currentdata} ></Covid>
+            // console.log(currentdata)
+        })    
     }
     render() {
         return (
 
             <div>
                 <h3>Data Covid List</h3>
-                <h3>Jumlah Terkonfirmasi:  {this.covidSum()}</h3>
+                <h3>Jumlah Terkonfirmasi: {this.state.total.TotalConfirmed} </h3>
 
                 <table className="table">
                     <thead className="thead-light">
@@ -59,11 +50,11 @@ export default class CovidList extends Component {
                             <th>Terkonfirmasi</th>
                             <th>Meninggal</th>
                             <th>Sembuh</th>
-                            <th>Aktif</th>
+                          
                         </tr>
                     </thead>
                     <tbody>
-                        {this.covidList()}
+                            {this.covidList()}
                     </tbody>
                 </table>
             </div>
