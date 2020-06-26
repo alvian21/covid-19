@@ -33,7 +33,7 @@ export default class CovidList extends Component {
     covidList() {
         return this.state.covid.map(currentdata => {
             return <Covid covid={currentdata} ></Covid>
-            // console.log(currentdata)
+        
         })    
     }
     render() {
